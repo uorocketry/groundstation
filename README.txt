@@ -1,6 +1,8 @@
-Code for the ground station 
+Code for the ground station.
+
+Follows an MVC structure.
 
 
 Notes:
 
-The GUI is coded with PySide and PyQt.  The framework is stable, mature and cross-platform, and .  Any machine with the proper plug-ins installed (installation package can be created).  To edit the program, you will need to download Qt (free version available, just google it), pyside libraries (requires python 3.4 or lower); some instructions here http://wiki.qt.io/PySide_Binaries_Windows .
+The GUI will be coded using the Kivy framework.  It has support for Windows, MacOS, Linux, iOS and Android; it also has support for multi-touch if that's something we want to implement later.  It claims that the same code can be used on all of the platforms, no changes.  
