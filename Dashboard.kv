@@ -1,0 +1,42 @@
+#Root screen
+<DashboardGridLayout>
+    rows: 2
+    padding: 10
+    spacing: 30
+
+    #background
+    canvas.before:
+        Rectangle:
+            pos: self.pos
+            size: self.size
+            source: 'background.png'
+
+    #The top bar
+    GridLayout:
+        cols: 3
+        size_hint_y: 0.1
+        size_hint_x: 1
+
+        Image:
+            source: "uostar-logo.png"
+
+        #Will display current date and time
+        Label:
+            text: "Date and time"
+            font_size: "35sp"
+
+        #Just a label saying that this is our ground station
+        Label:
+            text: "Ground Station"
+            font_size: "30sp"
+
+    #To house the graphs, command prompt and buttons
+    GridLayout:
+        size_hint_x: 1
+        size_hint_y: 0.9
+        padding: 10
+        spacing: 10
+
+
+
+
