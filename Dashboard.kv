@@ -1,8 +1,10 @@
 #Root screen
-<DashboardGridLayout>
+<DashboardGridLayout>:
     rows: 2
     padding: 10
     spacing: 30
+    id: dashboard
+    display: missionclock
 
     #background
     canvas.before:
@@ -22,8 +24,9 @@
 
         #Will display current date and time
         Label:
-            text: "Date and time"
-            font_size: "35sp"
+            id: missionclock
+            font_size: "32sp"
+            text: ""
 
         #Just a label saying that this is our ground station
         Label:
