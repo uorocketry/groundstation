@@ -42,9 +42,11 @@ class DummyRocket:
 
         if self.fuel_mass == 0 and not self.burnout:
             self.burnout = True
-            print "Burnout @ ", self.flight_time/1000, " s"
-            print "   velocity: ", self.velocity, " m/s"
-            print "    altitude: ", self.altitude, " m \n"
+            self.set_thrust(0)
+            print ("Burnout @ ", self.flight_time/1000, " s")
+            print ("   velocity: ", self.velocity, " m/s")
+            print ("    altitude: ", self.altitude, " m \n")
+
 
     # returns true if rocket is flying, false is falling
     def flying(self):

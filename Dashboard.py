@@ -5,23 +5,50 @@ import time
 
 from kivy.app import App
 from kivy.uix.gridlayout import GridLayout
-from kivy.uix.label import Label
-from kivy.uix.floatlayout import FloatLayout
 from kivy.clock import Clock
+from graph import Graph, MeshLinePlot
+from dummy_rocket import DummyRocket
 
 #Set window not resizeable
 #from kivy.config import Config
 #Config.set('graphics','resizable',0)
 
 #Set window size
-from kivy.core.window import Window
-Window.size = (1920, 1080)
+#from kivy.core.window import Window
+#Window.size = (1920, 1080)
 
 class DashboardGridLayout(GridLayout):
 
     def update_clock(self, dt):
-
         self.display.text = time.asctime()
+
+    #temporary to account for Clock sending dt arguments
+    #In the future this function will process the data being sent by the rocket
+    def update_rocket(self, dt):
+        self.rocket.update()
+
+    def connect(self):
+        #self.ids.graph_alt.add_plot(self.plot)
+        self.alt_set = []
+        self.vel_set = []
+        self.acc_set = []
+        self.rocket = DummyRocket()
+        self.rocket.set_thrust(1)
+        Clock.schedule_interval(self.update_rocket, 0.001)
+        Clock.schedule_interval(self.read_data, 0.001)
+
+    def read_data(self, dt):
+        alt = self.rocket.altitude
+        print(alt)
+        self.alt_set.append(alt)
+
+        vel = self.rocket.velocity
+        print(vel)
+        self.vel_set.append(vel)
+
+        acc = self.rocket.acceleration
+        print(acc)
+        self.acc_set.append(acc)
 
 
 class DashboardApp(App):
@@ -32,5 +59,6 @@ class DashboardApp(App):
 
 dbApp = DashboardApp()
 dbApp.run()
+
 
 
