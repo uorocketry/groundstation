@@ -1,13 +1,23 @@
+<CustomPopup>:
+    size_hint: .4, .4
+    auto_dismiss: False
+    title: "Connection"
+    Button:
+        size_hint: 1, 1
+        font_size: "22sp"
+        text: "Connection Made"
+        on_press: root.dismiss()
+
+
 #Root screen
 <DashboardGridLayout>:
     rows: 2
     padding: 10
-    spacing: 10
+    spacing: 0
     size_hint_x: 1
     size_hint_y: 1
     id: dashboard
     display: missionclock
-    altgraph: graph_alt
 
     #background
     canvas.before:
@@ -21,6 +31,7 @@
         cols: 3
         size_hint_y: 0.1
         size_hint_x: 1
+
 
         Image:
             source: "uostar-logo.png"
@@ -45,35 +56,55 @@
         spacing: 10
 
         GridLayout:
-            rows: 3
-            spacing: 10
+            cols: 2
+            GridLayout:
+                rows: 3
+                size_hint: 0.2, 1
 
-            BoxLayout:
-                orientation: "horizontal"
-
-                BoxLayout:
-                    orientation: "vertical"
+                GridLayout:
+                    rows: 2
 
                     Label:
                         text: "Altitude"
-                        font_size: "24sp"
+                        font_size: "30sp"
 
                     Label:
                         text: "current alt"
+                        font_size: "26sp"
+
+                GridLayout:
+                    rows: 2
+
+                    Label:
+                        text: "Velocity"
                         font_size: "30sp"
 
-            Graph:
-                xlabel: "Time"
-                ylabel: "Altitude (m)"
-                id: graph_alt
+                    Label:
+                        text: "current vel"
+                        font_size: "26sp"
+
+                GridLayout:
+                    rows: 2
+
+                    Label:
+                        text: "Acceleration"
+                        font_size: "30sp"
+
+                    Label:
+                        text: "current acc"
+                        font_size: "26sp"
+            #For graphs
+            GridLayout:
+                rows: 3
+                size_hint: 0.8, 1
 
 
 
         BoxLayout:
+            size_hint: 0.3, 1
             orientation: "horizontal"
             Button:
-                size_hint_x: 0.1
-                size_hint_y: 0.05
+                size_hint: 0.8, 0.1
                 id: connect
                 text: "Connect"
                 on_press: dashboard.connect()

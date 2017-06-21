@@ -8,6 +8,7 @@ from kivy.uix.gridlayout import GridLayout
 from kivy.clock import Clock
 from graph import Graph, MeshLinePlot
 from dummy_rocket import DummyRocket
+from kivy.uix.popup import Popup
 
 #Set window not resizeable
 #from kivy.config import Config
@@ -34,6 +35,7 @@ class DashboardGridLayout(GridLayout):
         self.acc_set = []
         self.rocket = DummyRocket()
         self.rocket.set_thrust(1)
+        self.open_popup()
         Clock.schedule_interval(self.update_rocket, 0.001)
         Clock.schedule_interval(self.read_data, 0.001)
 
@@ -49,6 +51,15 @@ class DashboardGridLayout(GridLayout):
         acc = self.rocket.acceleration
         print(acc)
         self.acc_set.append(acc)
+
+    def open_popup(self):
+        connection_popup = CustomPopup()
+        connection_popup.open()
+
+
+class CustomPopup(Popup):
+    pass
+
 
 
 class DashboardApp(App):
