@@ -3,6 +3,7 @@ kivy.require("1.10.0")
 
 import time
 
+from math import sin
 from kivy.app import App
 from kivy.uix.gridlayout import GridLayout
 from kivy.clock import Clock
@@ -56,8 +57,15 @@ class DashboardGridLayout(GridLayout):
         connection_popup = CustomPopup()
         connection_popup.open()
 
+    def plot(self):
+        plot = MeshLinePlot(color=[1, 0, 0, 1])
+        plot.points = [(x, sin(x/10)) for x in range(0, 100)]
+        self.graph_alt.add_plot(plot)
 
 class CustomPopup(Popup):
+    pass
+
+class CustGraph(Graph):
     pass
 
 
@@ -65,6 +73,7 @@ class CustomPopup(Popup):
 class DashboardApp(App):
     def build(self):
         d = DashboardGridLayout()
+        d.plot()
         Clock.schedule_interval(d.update_clock, 1)
         return d
 
