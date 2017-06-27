@@ -25,8 +25,12 @@
     size_hint_x: 1
     size_hint_y: 1
     id: dashboard
-    display: missionclock
+    clck: missionclock
     graph_alt: altgraph
+    main: maindisplay
+    alt_display: cur_alt
+    vel_display: cur_vel
+    acc_display: cur_acc
 
     #background
     canvas.before:
@@ -58,6 +62,7 @@
 
     #To house the graphs, buttons
     GridLayout:
+        id: maindisplay
         cols: 2
         size_hint_x: 1
         size_hint_y: 0.9
@@ -65,12 +70,15 @@
         spacing: 10
 
         GridLayout:
+            id: data
             cols: 2
             GridLayout:
+                id: headsup
                 rows: 3
                 size_hint: 0.2, 1
 
                 GridLayout:
+                    id: alt
                     rows: 2
 
                     Label:
@@ -78,8 +86,9 @@
                         font_size: "30sp"
 
                     Label:
-                        text: "current alt"
-                        font_size: "26sp"
+                        id: cur_alt
+                        text: "00.00"
+                        font_size: "32sp"
 
                 GridLayout:
                     rows: 2
@@ -89,19 +98,21 @@
                         font_size: "30sp"
 
                     Label:
-                        text: "current vel"
-                        font_size: "26sp"
+                        id: cur_vel
+                        text: "00.00"
+                        font_size: "32sp"
 
                 GridLayout:
                     rows: 2
 
                     Label:
                         text: "Acceleration"
-                        font_size: "30sp"
+                        font_size: "32sp"
 
                     Label:
-                        text: "current acc"
-                        font_size: "26sp"
+                        id: cur_acc
+                        text: "00.00"
+                        font_size: "32sp"
             #For graphs
             GridLayout:
                 rows: 3
@@ -112,9 +123,9 @@
                     x_ticks_minor: 5
                     y_ticks_major: 1
                     xmin: 0
-                    ymin: -1
-                    xmax: 100
-                    ymax: 1
+                    ymin: 0
+                    xmax: 10
+                    ymax: 10
                     padding: 5
 
                     ylabel: "Altitude"
