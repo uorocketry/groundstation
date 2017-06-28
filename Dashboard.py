@@ -30,19 +30,21 @@ class DashboardGridLayout(GridLayout):
         self.rocket.update()
 
     def connect(self):
+        self.ele = 0
         self.alt_set = []
         self.vel_set = []
         self.acc_set = []
-        self.time_set = []
+        self.tim_set = []
         self.rocket = DummyRocket()
         self.rocket.set_thrust(1)
         self.open_popup()
         Clock.schedule_interval(self.update_rocket, 0.001)
-        Clock.schedule_interval(self.read_data, 0.01)
-        Clock.schedule_interval(self.plot, 0.01)
+        Clock.schedule_interval(self.read_data, 0.001)
+        Clock.schedule_interval(self.plot, 0.001)
 
 
     def read_data(self, dt):
+        self.ele += 1
         self.alt = self.rocket.altitude
         self.alt_set.append(self.alt)
 
@@ -54,7 +56,7 @@ class DashboardGridLayout(GridLayout):
         self.acc_set.append(self.acc)
 
         self.tim = self.rocket.flight_time
-        self.time_set.append(self.tim)
+        self.tim_set.append(self.tim)
 
 
     def open_popup(self):
@@ -66,7 +68,7 @@ class DashboardGridLayout(GridLayout):
         self.vel_display.text = str(round(self.vel, 2))
         self.acc_display.text = str(round(self.acc, 2))
         plot = MeshLinePlot(color=[1, 0, 0, 1])
-        plot.points = [(x, x) for x in self.alt_set]
+        plot.points = [(x/1000, self.alt_set[x]) for x in range(self.ele)]
         #self.graph_alt.xmin = self.alt_count + 10
         self.graph_alt.add_plot(plot)
 
