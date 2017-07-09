@@ -27,6 +27,8 @@
     id: dashboard
     clck: missionclock
     graph_alt: altgraph
+    graph_vel: velgraph
+    graph_acc: accgraph
     main: maindisplay
     alt_display: cur_alt
     vel_display: cur_vel
@@ -119,25 +121,45 @@
                 size_hint: 0.8, 1
 
                 CustGraph:
-                    x_ticks_major: 25
-                    x_ticks_minor: 5
-                    y_ticks_major: 50
-                    y_tick_minor: 1
+                    x_ticks_major: 30
+                    x_ticks_minor: 10
+                    y_ticks_major: 1000
+                    y_tick_minor:
                     xmin: 0
                     ymin: 0
-                    xmax: 15
-                    ymax: 10
+                    xmax: 120
+                    ymax: 3500
                     padding: 5
 
                     ylabel: "Altitude"
                     id: altgraph
 
+
                 CustGraph:
                     ylabel: "Velocity"
+                    x_ticks_major: 30
+                    x_ticks_minor: 10
+                    y_ticks_major: 10
+                    y_tick_minor: 2
+                    xmin: 0
+                    ymin: 0
+                    xmax: 120
+                    ymax: 40
+                    padding: 5
+                    id: velgraph
 
                 CustGraph:
                     ylabel: "Acceleration"
-
+                    x_ticks_major: 10
+                    x_ticks_minor: 2
+                    y_ticks_major: 50
+                    y_tick_minor: 1
+                    xmin: 0
+                    ymin: -15
+                    xmax: 120
+                    ymax: 50
+                    padding: 5
+                    id: accgraph
 
 
         BoxLayout:
