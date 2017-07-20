@@ -1,15 +1,19 @@
+#
+
+
 import kivy
 kivy.require("1.10.0")
 
 import time
+import xlwt
 
-from math import sin
 from kivy.app import App
 from kivy.uix.gridlayout import GridLayout
 from kivy.clock import Clock
 from graph import Graph, MeshLinePlot
 from dummy_rocket import DummyRocket
 from kivy.uix.popup import Popup
+
 
 #Set window not resizeable
 #from kivy.config import Config
@@ -38,10 +42,37 @@ class DashboardGridLayout(GridLayout):
         self.rocket = DummyRocket()
         self.rocket.set_thrust(1)
         self.open_popup()
+        self.end = False
         self.plot()
 
-        Clock.schedule_interval(self.update_rocket, 0.001)
-        Clock.schedule_interval(self.update, 1)
+        #runs the sim before graph starts to prevent performance issues
+        while not (self.rocket.burnout):
+            if(self.rocket.flight_time %100 == 0):
+
+                self.alt = self.rocket.altitude
+                self.alt_set.append(self.alt)
+
+                self.vel = self.rocket.velocity
+                self.vel_set.append(self.vel)
+
+                self.acc = self.rocket.acceleration
+                self.acc_set.append(self.acc)
+
+                self.tim = self.rocket.flight_time
+                self.tim_set.append(self.tim / 1000)
+
+            self.rocket.update()
+
+        #Create the excel sheet to which all data will be saved
+        self.book = xlwt.Workbook(encoding="utf-8")
+        self.sheet1 = self.book.add_sheet("Flight Data")
+        self.sheet1.write(0, 0, "Flight Time")
+        self.sheet1.write(1, 0, "Altitude")
+        self.sheet1.write(2, 0, "Velocity")
+        self.sheet1.write(3, 0, "Acceleration")
+
+        #Start reading data
+        Clock.schedule_interval(self.update, 0.1)
 
     def open_popup(self):
         connection_popup = CustomPopup()
@@ -62,39 +93,69 @@ class DashboardGridLayout(GridLayout):
 
 
     def update(self, dt):
-        self.alt = self.rocket.altitude
-        #self.alt_set.append(self.alt)
 
-        self.vel = self.rocket.velocity
-        #self.vel_set.append(self.vel)
+        #while (not self.end):
+        #Check to make sure all data is received; if not set as 0
+        try:
+            self.tim = self.tim_set[self.ele]/1000
+        except IndexError:
+            self.tim = self.tim + 0.1
 
-        self.acc = self.rocket.acceleration
-        #self.acc_set.append(self.acc)
+        try:
+            self.alt = self.alt_set[self.ele]
 
-        self.tim = self.rocket.flight_time
-        #self.tim_set.append(self.tim)
+        except IndexError:
+            self.alt = 0
 
-        self.alt_display.text = str(round(self.alt, 2))
-        self.vel_display.text = str(round(self.vel, 2))
-        self.acc_display.text = str(round(self.acc, 2))
+        try:
+            self.vel = self.vel_set[self.ele]
 
-        self.plot_alt.points.append((self.tim/1000, self.alt))
-        #= [(x / 1000, self.alt_set[x]) for x in range(self.ele)]
-        self.plot_vel.points.append((self.tim/1000, self.vel))
-        #= [(x / 1000, self.vel_set[x]) for x in range(self.ele)]
-        self.plot_acc.points.append((self.tim/1000, self.acc))
-        #= [(x / 1000, self.acc_set[x]) for x in range(self.ele)]
+        except IndexError:
+            self.vel = 0
+
+        try:
+            self.acc = self.acc_set[self.ele]
+
+        except IndexError:
+            self.acc = 0
+
+
+        #Add all the values to their respective arrays
+        self.tim_set.append(self.tim)
+        self.alt_set.append(self.alt)
+        self.vel_set.append(self.vel)
+        self.acc_set.append(self.acc)
+
+        self.alt_display.text = str(round(self.alt_set[self.ele], 2))
+        self.vel_display.text = str(round(self.vel_set[self.ele], 2))
+        self.acc_display.text = str(round(self.tim_set[self.ele], 2))
+
+        if (self.ele <= 200):
+            self.plot_alt.points = ((self.tim_set[x], self.alt_set[x]) for x in range(self.ele))
+            self.plot_vel.points = ((self.tim_set[x], self.vel_set[x]) for x in range(self.ele))
+            self.plot_acc.points = ((self.tim_set[x], self.acc_set[x]) for x in range(self.ele))
+
+        else:
+            self.graph_alt.xmax = self.ele/10 + 10
+            self.graph_alt.xmin = self.ele/10 - 20
+
+            self.graph_vel.xmax = self.ele/10 + 10
+            self.graph_vel.xmin = self.ele/10 - 20
+
+            self.graph_acc.xmax = self.ele/10 + 10
+            self.graph_acc.xmin = self.ele/10 - 20
+
+            self.plot_alt.points = ((self.tim_set[x], self.alt_set[x]) for x in range(self.ele-200, self.ele))
+            self.plot_vel.points = ((self.tim_set[x], self.vel_set[x]) for x in range(self.ele-200, self.ele))
+            self.plot_acc.points = ((self.tim_set[x], self.acc_set[x]) for x in range(self.ele-200, self.ele))
 
         self.ele += 1
-
 
 class CustomPopup(Popup):
     pass
 
 class CustGraph(Graph):
     pass
-
-
 
 class DashboardApp(App):
     def build(self):
@@ -104,6 +165,3 @@ class DashboardApp(App):
 
 dbApp = DashboardApp()
 dbApp.run()
-
-
-
